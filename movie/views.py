@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 
@@ -27,7 +27,7 @@ def signup(request):
             data = User(name=request.POST.get("name"), email=request.POST.get("email"), password=request.POST.get("password"), confirm_password=request.POST.get("confirm_password"))
             data.save()
             # redirect to a new URL:
-            return HttpResponseRedirect('/login/')
+            return redirect('login')
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -44,7 +44,7 @@ def login(request):
             request.session['email'] = request.POST.get("email")
             print (request.session['email'])
             print (request.user)
-            return HttpResponseRedirect('/')
+            return redirect('home')
         else:
             return HttpResponse('<p style="color:red; text-align:center; font-size:xx-large; font-weight:bolder;">\
                 Wrong email or password!!</p>')
@@ -57,7 +57,7 @@ def login(request):
 def logout(request):
     if request.session.has_key('email'):
         del request.session['email']
-        return HttpResponseRedirect(reverse('home'))
+        return redirect('home')
     else:
         return HttpResponse("<strong>Something went wrong</strong>")
 
@@ -76,4 +76,4 @@ def search(request):
             return render(request, 'home.html', { 'response': output_response })
 
     else:
-        return HttpResponseRedirect(reverse('home'))
+        return redirect('home')

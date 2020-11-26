@@ -5,8 +5,8 @@
  <div class="container">
     <form  method="post">
         {% csrf_token %}
-        {{ form }}
-        <input class="btn btn-success mb-2" type="submit" value="Submit">
+        {{ form.as_p }}
+        <input class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit" value="Submit">
     </form>
  </div>
 

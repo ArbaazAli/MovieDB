@@ -1,5 +1,12 @@
 form {
     text-align: center;
+    margin-top: 20px;
 }
 
+nav.navbar{
+    background: linear-gradient(40deg, #2096ff, #05ffa3);
+}
 
+p label {
+    display: block;
+}
