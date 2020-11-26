@@ -1,0 +1,39 @@
+{% extends 'base.html '%}
+      
+    {% block content %}
+        <div class="container d-flex align-items-center flex-column">
+            <form class="form-inline md-form mr-auto mb-4" action="/" method="POST">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" name="search" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn aqua-gradient btn-rounded btn-sm my-0" type="submit">Search</button>
+            </form>
+            {% if response %}
+
+                <!-- Masthead Heading-->
+                {{ response.Title }}
+                <img src="{{ response.Poster }}" alt="{{ response.Title }}">
+                <p>Release Date: {{ response.Year }}</p>
+                <p>Ratings: {{ response.imdbRating }}</p>
+                <p>Genre: {{ response.Genre }}</p>
+                <p>Actors: {{ response.Actors}}</p>
+                <p>About: {{ response.Plot }}</p>
+
+            {% else %}    
+
+                <!-- Masthead Heading-->
+                <h1 class="masthead-heading text-uppercase mb-0">
+                    {% for movie in movies %}
+                    <h2>{{ movie.title }}</h2>
+                    <img src="{{ movie.thumbnail.url }}" alt="{{ movie.title }}">
+                        {% for genre in movie.genre.all %} {{ genre}} {% endfor %}
+                    <div class="divider-custom-icon"><i class="fas fa-star"></i><span> Rating : {{ movie.rating }}</span></div>
+                        
+                    Duration : {{ movie.duration|time:"g\h i\m" }}
+                    <p>
+                    {{ movie.description }}
+                    </p>
+                    {% endfor %}
+                </h1>
+            {% endif %}    
+        </div>
+    {% endblock %}
