@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
 
 from .models import User, Movie, Genre
 from .form import LoginForm, SignupForm
@@ -11,16 +12,6 @@ def home(request):
     #print (movie_qs)
     if request.session.has_key('email'):
         session = request.session['email']
-        
-
-        if request.method == 'POST':
-            movie_title = request.POST['search']
-            response = requests.get(f"http://www.omdbapi.com/?t={movie_title}&apikey=198361c3")
-            output_response = response.json()
-            print (output_response)
-            print(movie_title)
-            return render(request, 'test.html', { 'response': output_response })
-
         return render(request, 'home.html', {"movies": movie_qs, "session": session})
         
     else:
@@ -66,6 +57,23 @@ def login(request):
 def logout(request):
     if request.session.has_key('email'):
         del request.session['email']
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect(reverse('home'))
     else:
         return HttpResponse("<strong>Something went wrong</strong>")
+
+
+def search(request):
+    if request.method == 'POST':
+        movie_title = request.POST['search']
+        response = requests.get(f"http://www.omdbapi.com/?t={movie_title}&apikey=198361c3")
+        output_response = response.json()
+        #print (output_response)
+        print(movie_title)
+        if request.session.has_key('email'):
+            session = request.session['email']
+            return render(request, 'home.html', {'response': output_response, "session": session})
+        else:   
+            return render(request, 'home.html', { 'response': output_response })
+
+    else:
+        return HttpResponseRedirect(reverse('home'))
